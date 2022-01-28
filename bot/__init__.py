@@ -18,11 +18,13 @@ import asyncio
 import glob
 import inspect
 import io
+import itertools
 import json
 import math
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -31,6 +33,8 @@ from datetime import datetime as dt
 from logging import DEBUG, INFO, basicConfig, getLogger, warning
 from pathlib import Path
 
+import aiohttp
+import psutil
 from html_telegraph_poster import TelegraphPoster
 from telethon import Button, TelegramClient, errors, events, functions, types
 from telethon.sessions import StringSession

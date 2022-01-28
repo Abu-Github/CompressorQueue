@@ -75,9 +75,20 @@ def hbs(size):
     return str(round(size, 2)) + " " + dict_power_n[raised_to_pow] + "B"
 
 
+No_Flood = {}
+
+
 async def progress(current, total, event, start, type_of_ps, file=None):
     now = time.time()
-    diff = now - start
+    if No_Flood.get(event.chat_id):
+        if No_Flood[event.chat_id].get(event.id):
+            if (now - No_Flood[event.chat_id][event.id]) < 1.1:
+                return
+        else:
+            No_Flood[event.chat_id].update({event.id: now})
+    else:
+        No_Flood.update({event.chat_id: {event.id: now}})
+    diff = time.time() - start
     if round(diff % 10.00) == 0 or current == total:
         percentage = current * 100 / total
         speed = current / diff
@@ -140,10 +151,57 @@ async def skip(e):
     out, dl, id = wh.split(";")
     try:
         if QUEUE.get(int(id)):
+            WORKING.clear()
             QUEUE.pop(int(id))
         await e.delete()
         os.remove(dl)
         os.remove(out)
+        # Lets kill ffmpeg else it will run in memory even after deleting
+        # input.
+        for proc in psutil.process_iter():
+            processName = proc.name()
+            processID = proc.pid
+            print(processName, " - ", processID)
+            if processName == "ffmpeg":
+                os.kill(processID, signal.SIGKILL)
     except BaseException:
         pass
     return
+
+
+async def fast_download(e, download_url, filename=None):
+    def progress_callback(d, t):
+        return (
+            asyncio.get_event_loop().create_task(
+                progress(
+                    d,
+                    t,
+                    e,
+                    time.time(),
+                    f"Downloading from {download_url}",
+                )
+            ),
+        )
+
+    async def _maybe_await(value):
+        if inspect.isawaitable(value):
+            return await value
+        else:
+            return value
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(download_url, timeout=None) as response:
+            if not filename:
+                filename = download_url.rpartition("/")[-1]
+            filename = os.path.join("downloads", filename)
+            total_size = int(response.headers.get("content-length", 0)) or None
+            downloaded_size = 0
+            with open(filename, "wb") as f:
+                async for chunk in response.content.iter_chunked(1024):
+                    if chunk:
+                        f.write(chunk)
+                        downloaded_size += len(chunk)
+                        await _maybe_await(
+                            progress_callback(downloaded_size, total_size)
+                        )
+            return filename
