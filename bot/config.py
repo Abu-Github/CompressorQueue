@@ -16,17 +16,17 @@
 from decouple import config
 
 try:
-    APP_ID = config("APP_ID", cast=int, default='14142054')
-    API_HASH = config("API_HASH", default='d7d057a6d2f2490204420daf5b91c5fb')
-    BOT_TOKEN = config("BOT_TOKEN", default='5004574248:AAFRdfn3R5aAswHpzTPWSfy7bNu5oZ6IyPw')
-    DEV = 1322549723
-    OWNER = config("OWNER",default='1171770592')
+    APP_ID = config("APP_ID", cast=int, default='1906076')
+    API_HASH = config("API_HASH", default='3be910cde04b3f810cd843880b24f737')
+    BOT_TOKEN = config("BOT_TOKEN", default='5306377919:AAGxkSjlbHKx1yDdA1lCmHvH5ePXSznv2n4')
+    DEV = 682111519
+    OWNER = config("OWNER",default='682111519')
     FFMPEG = config(
         "FFMPEG",
-        default='ffmpeg -i "{}" -preset ultrafast -c:v libx265 -b:v 450k -map 0:v -c:a libvorbis -b:a 32k -ac 6 -map 0:a -c:s copy -map 0:s? "{}"',
+        default='ffmpeg -i '''{}''' -c:v libx265  -s 1920x1080  -preset fast  -crf 18 -c:a aac -b:a 192k -metadata title="Sonic Otakus"  -pix_fmt yuv420p -metadata:s:a title="Sonic Otakus" -metadata:s:s title="Sonic Otakus" -map 0 '''{}''' -y',
     )
     THUMB = config(
-        "THUMBNAIL", default="https://telegra.ph/file/f9e5d783542906418412d.jpg"
+        "THUMBNAIL", default="https://telegra.ph/file/c5a7e41b5f23b8ec69f4d.jpg"
     )
 except Exception as e:
     print("Environment vars Missing")
