@@ -23,7 +23,7 @@ try:
     OWNER = config("OWNER",default='682111519')
     FFMPEG = config(
         "FFMPEG",
-        default='ffmpeg -i '''{}''' -c:v libx265  -s 1920x1080  -preset fast  -crf 18 -c:a aac -b:a 192k -metadata title="Sonic Otakus"  -pix_fmt yuv420p -metadata:s:a title="Sonic Otakus" -metadata:s:s title="Sonic Otakus" -map 0 '''{}''' -y',
+        default='ffmpeg -i "{}" -preset ultrafast -c:v libx265 -b:v 450k -map 0:v -c:a libvorbis -b:a 32k -ac 6 -map 0:a -c:s copy -map 0:s? "{}"',
     )
     THUMB = config(
         "THUMBNAIL", default="https://telegra.ph/file/c5a7e41b5f23b8ec69f4d.jpg"
