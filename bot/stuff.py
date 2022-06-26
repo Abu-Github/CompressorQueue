@@ -57,10 +57,10 @@ async def beck(event):
     await event.edit(
         f"Hi `{event.sender.first_name}`\nThis is A CompressorQueue Which Can Encode Videos.\nReduce Size of Videos With Negligible Quality Change\nU can Generate Samples/screenshots too.",
         buttons=[
-            [Button.inline("HELP", data="ihelp")],
+            [Button.inline("Help", data="ihelp")],
             [
-                Button.url("SOURCE CODE", url="github.com/1Danish-00/"),
-                Button.url("DEVELOPER", url="t.me/danish_00"),
+                Button.url("Co Developer", url="https://t.me/KodalineMusic"),
+                Button.url("Developer", url="https://t.me/jackssmit"),
             ],
         ],
     )
