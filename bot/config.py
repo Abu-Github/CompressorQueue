@@ -27,9 +27,7 @@ try:
         "FFMPEG",
         default='ffmpeg -i "{}" -preset ultrafast -c:v libx265 -b:v 450k -map 0:v -c:a libvorbis -b:a 32k -ac 6 -map 0:a -c:s copy -map 0:s? "{}"',
     )
-    THUMB = config(
-        "THUMBNAIL", default=""
-    )
+    THUMB = config("THUMBNAIL", default="")
 except Exception as e:
     print("Environment vars Missing")
     print("something went wrong")
